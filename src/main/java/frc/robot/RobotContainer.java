@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.commands.AutoDrive;
 import frc.robot.commands.AutoMag;
 import frc.robot.commands.AutoShoot;
+import frc.robot.commands.AutoCurve;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
@@ -46,32 +47,65 @@ public class RobotContainer {
   private final Climber m_climber = new Climber();
   XboxController xbdrive = new XboxController(0);
   XboxController xbshoot = new XboxController(1);
-  private final SequentialCommandGroup m_turnTest = new SequentialCommandGroup(new TurnToAngle(90, m_drive).beforeStarting(m_drive::zeroHeading));
   private final AutoDrive m_driveTest = new AutoDrive(25, m_drive);
+
+  private final SequentialCommandGroup m_turnTest = new SequentialCommandGroup(
+    new TurnToAngle(90, m_drive).beforeStarting(m_drive::zeroHeading)
+    );
+
+  private final SequentialCommandGroup m_looptest = new SequentialCommandGroup(
+    new AutoCurve(90, 1, m_drive).beforeStarting(m_drive::zeroHeading)
+    );
+
+  private final SequentialCommandGroup m_dontouchmabarrelstest = new SequentialCommandGroup(
+    new AutoDrive(90, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(360, 1, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoDrive(70, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-315, 1, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoDrive(70, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-225, 1, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoDrive(160, m_drive).beforeStarting(m_drive::zeroHeading)
+    );
+
+    private final SequentialCommandGroup m_slolonmtest = new SequentialCommandGroup(
+    new AutoCurve(-75, 0.5, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(80, 1, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-270, 0.75, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(80, 1, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-75, 0.5, m_drive).beforeStarting(m_drive::zeroHeading)
+    );
+
+    private final SequentialCommandGroup m_Bouncetest = new SequentialCommandGroup(
+    new AutoCurve(-90, 0.5, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-45, -1, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-90, -0.25, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-45, -1, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-45, 1, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-90, 0.25, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-45, 1, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-90, -0.5, m_drive).beforeStarting(m_drive::zeroHeading)
+    );
+
   private final SequentialCommandGroup m_sequencetest = new SequentialCommandGroup(
    new AutoDrive(24, m_drive).beforeStarting(m_drive::resetEncoders),
-  new TurnToAngle(-30, m_drive).beforeStarting(m_drive::zeroHeading),
-   new AutoDrive(10, m_drive).beforeStarting(m_drive::resetEncoders));
+   new TurnToAngle(-30, m_drive).beforeStarting(m_drive::zeroHeading),
+   new AutoDrive(10, m_drive).beforeStarting(m_drive::resetEncoders)
+   );
 
    private final SequentialCommandGroup m_hopetishworks = new SequentialCommandGroup(
     new AutoDrive(24, m_drive).beforeStarting(m_drive::resetEncoders),
-   new TurnToAngle(60, m_drive).beforeStarting(m_drive::zeroHeading),
+    new TurnToAngle(60, m_drive).beforeStarting(m_drive::zeroHeading),
     new AutoDrive(70, m_drive).beforeStarting(m_drive::resetEncoders),
     new TurnToAngle(-60, m_drive).beforeStarting(m_drive::zeroHeading),
     new ParallelCommandGroup(
       new AutoShoot(1150, 3350, m_shooter),
-      new AutoDrive(28, m_drive).beforeStarting(m_drive::resetEncoders)),
+      new AutoDrive(28, m_drive).beforeStarting(m_drive::resetEncoders)
+      ),
     new AutoMag(-1, m_magazine)
     );
 
-    private final ParallelCommandGroup m_moooveshoot = new ParallelCommandGroup(
-      new AutoShoot(1150, 3350, m_shooter),
-      //Distance should be 90, changed to diagnose problems
-      new AutoDrive(84, m_drive).beforeStarting(m_drive::resetEncoders),
-      new SequentialCommandGroup(
-       new  WaitCommand(5),
-        new AutoMag(-1, m_magazine)
-    ));
+    //The next line is a four-step auton, but has been crunched to one line for demonstration purposes.
+    private final ParallelCommandGroup m_moooveshoot = new ParallelCommandGroup(new AutoShoot(1150, 3350, m_shooter), new AutoDrive(84, m_drive).beforeStarting(m_drive::resetEncoders), new SequentialCommandGroup(new  WaitCommand(5),new AutoMag(-1, m_magazine)));
 
     private final ParallelCommandGroup m_shoetest = new ParallelCommandGroup(
     new AutoShoot(1150, 3350, m_shooter),
@@ -118,6 +152,10 @@ public class RobotContainer {
       m_chooser.addOption("shoetest", m_shoetest);
       m_chooser.addOption("moooveshoot", m_moooveshoot);
       m_chooser.addOption("ejecttest", m_ejecttest);
+      m_chooser.addOption("looptest", m_looptest);
+      m_chooser.addOption("dontouchmabarrelstest", m_dontouchmabarrelstest); 
+      m_chooser.addOption("slolontest", m_slolonmtest);
+      m_chooser.addOption("Bouncetest", m_Bouncetest);
 
 
   
