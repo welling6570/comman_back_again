@@ -31,12 +31,12 @@ public class TurnToAngle extends PIDCommand {
         // Set reference to target
         targetAngleDegrees,
         // Pipe output to turn robot
-        output -> drive.arcadeDrive(0.0, MathUtil.clamp(output, -0.85, 0.85), 0.0, 0.0),
+        output -> drive.arcadeDrive(0.0, MathUtil.clamp(output, -0.85, 0.85), false),
         // Require the drive
         drive);
 
     // Set the controller to be continuous (because it is an angle controller)
-    getController().enableContinuousInput(-180, 180);
+    //getController().enableContinuousInput(-180, 180);
     // Set the controller tolerance - the delta tolerance ensures the robot is stationary at the
     // setpoint before it is considered as having reached the reference
     getController()

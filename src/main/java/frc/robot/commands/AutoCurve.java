@@ -23,7 +23,7 @@ public class AutoCurve extends PIDCommand {
    * @param targetAngleDegrees The angle to turn to
    * @param drive              The drive subsystem to use
    */
-  public AutoCurve(double targetAngleDegrees, double speed, Drive drive) {
+  public AutoCurve(double targetAngleDegrees, double speed, double turnspeed, Drive drive) {
     super(
         new PIDController(.5, 0.01, 0),
         // Close loop on heading
@@ -31,16 +31,16 @@ public class AutoCurve extends PIDCommand {
         // Set reference to target
         targetAngleDegrees,
         // Pipe output to turn robot
-        output -> drive.arcadeDrive(speed, MathUtil.clamp(output, -0.85, 0.85), 0.0, 0.0),
+        output -> drive.arcadeDrive(-speed, MathUtil.clamp(output, -turnspeed, turnspeed), true),
         // Require the drive
         drive);
 
     // Set the controller to be continuous (because it is an angle controller)
-    getController().enableContinuousInput(-180, 180);
+    getController().disableContinuousInput();
     // Set the controller tolerance - the delta tolerance ensures the robot is stationary at the
     // setpoint before it is considered as having reached the reference
     getController()
-        .setTolerance(3.5, 10);
+        .setTolerance(5, 10);
   }
 
   @Override

@@ -54,36 +54,43 @@ public class RobotContainer {
     );
 
   private final SequentialCommandGroup m_looptest = new SequentialCommandGroup(
-    new AutoCurve(90, 1, m_drive).beforeStarting(m_drive::zeroHeading)
+    new AutoCurve(90, 0.6, 0.6, m_drive).beforeStarting(m_drive::zeroHeading)
     );
 
+  private final SequentialCommandGroup m_looptestv2 = new SequentialCommandGroup(
+    new AutoCurve(90, 0.6, 0.6, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(90, 0.6, 0.6, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(90, 0.6, 0.6, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(90, 0.6, 0.6, m_drive).beforeStarting(m_drive::zeroHeading)
+    );
+    
   private final SequentialCommandGroup m_dontouchmabarrelstest = new SequentialCommandGroup(
-    new AutoDrive(90, m_drive).beforeStarting(m_drive::zeroHeading),
-    new AutoCurve(360, 1, m_drive).beforeStarting(m_drive::zeroHeading),
-    new AutoDrive(70, m_drive).beforeStarting(m_drive::zeroHeading),
-    new AutoCurve(-315, 1, m_drive).beforeStarting(m_drive::zeroHeading),
-    new AutoDrive(70, m_drive).beforeStarting(m_drive::zeroHeading),
-    new AutoCurve(-225, 1, m_drive).beforeStarting(m_drive::zeroHeading),
-    new AutoDrive(160, m_drive).beforeStarting(m_drive::zeroHeading)
+    new AutoDrive(95, m_drive).beforeStarting(m_drive::resetEncoders),
+    new AutoCurve(360, 0.69, 0.73, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoDrive(53, m_drive).beforeStarting(m_drive::resetEncoders),
+    new AutoCurve(-310, 0.69, 0.78, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoDrive(46, m_drive).beforeStarting(m_drive::resetEncoders),
+    new AutoCurve(-227, 0.69, 0.78, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoDrive(223, m_drive).beforeStarting(m_drive::resetEncoders)
     );
 
     private final SequentialCommandGroup m_slolonmtest = new SequentialCommandGroup(
-    new AutoCurve(-75, 0.5, m_drive).beforeStarting(m_drive::zeroHeading),
-    new AutoCurve(80, 1, m_drive).beforeStarting(m_drive::zeroHeading),
-    new AutoCurve(-270, 0.75, m_drive).beforeStarting(m_drive::zeroHeading),
-    new AutoCurve(80, 1, m_drive).beforeStarting(m_drive::zeroHeading),
-    new AutoCurve(-75, 0.5, m_drive).beforeStarting(m_drive::zeroHeading)
+    new AutoCurve(-75, 0.5, 0.85, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(80, 1, 0.85, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-270, 0.85, 0.75, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(80, 1, 0.85, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-75, 0.5, 0.85, m_drive).beforeStarting(m_drive::zeroHeading)
     );
 
     private final SequentialCommandGroup m_Bouncetest = new SequentialCommandGroup(
-    new AutoCurve(-90, 0.5, m_drive).beforeStarting(m_drive::zeroHeading),
-    new AutoCurve(-45, -1, m_drive).beforeStarting(m_drive::zeroHeading),
-    new AutoCurve(-90, -0.25, m_drive).beforeStarting(m_drive::zeroHeading),
-    new AutoCurve(-45, -1, m_drive).beforeStarting(m_drive::zeroHeading),
-    new AutoCurve(-45, 1, m_drive).beforeStarting(m_drive::zeroHeading),
-    new AutoCurve(-90, 0.25, m_drive).beforeStarting(m_drive::zeroHeading),
-    new AutoCurve(-45, 1, m_drive).beforeStarting(m_drive::zeroHeading),
-    new AutoCurve(-90, -0.5, m_drive).beforeStarting(m_drive::zeroHeading)
+    new AutoCurve(-90, 0.5, 0.85, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-15, -1, 0.85, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-150, -0.25, 0.85, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-15, -1, 0.85, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-15, 1, 0.85, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-150, 0.25, 0.85, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-15, 1, 0.85, m_drive).beforeStarting(m_drive::zeroHeading),
+    new AutoCurve(-90, -0.5, 0.85, m_drive).beforeStarting(m_drive::zeroHeading)
     );
 
   private final SequentialCommandGroup m_sequencetest = new SequentialCommandGroup(
@@ -135,7 +142,7 @@ public class RobotContainer {
     hd3k.setResolution(160, 120);
     hd3k.setFPS(15);
     m_drive.setDefaultCommand(
-      new RunCommand(() -> m_drive.arcadeDrive(xbdrive.getRawAxis(1), xbdrive.getRawAxis(0), xbdrive.getRawAxis(5), xbdrive.getRawAxis(4)), m_drive));
+      new RunCommand(() -> m_drive.arcadeDrive(xbdrive.getRawAxis(1), xbdrive.getRawAxis(4), xbdrive.getBumper(GenericHID.Hand.kRight)), m_drive));
     m_intake.setDefaultCommand(
     new RunCommand(() -> m_intake.set(xbshoot.getRawAxis(3), xbshoot.getRawAxis(2)), m_intake));
     m_shooter.setDefaultCommand(
@@ -153,6 +160,7 @@ public class RobotContainer {
       m_chooser.addOption("moooveshoot", m_moooveshoot);
       m_chooser.addOption("ejecttest", m_ejecttest);
       m_chooser.addOption("looptest", m_looptest);
+      m_chooser.addOption("looptestv2", m_looptestv2);
       m_chooser.addOption("dontouchmabarrelstest", m_dontouchmabarrelstest); 
       m_chooser.addOption("slolontest", m_slolonmtest);
       m_chooser.addOption("Bouncetest", m_Bouncetest);

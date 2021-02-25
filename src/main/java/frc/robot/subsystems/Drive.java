@@ -35,19 +35,16 @@ public class Drive extends SubsystemBase {
     rightencoder.setDistancePerPulse(0.052359);
   }
 
-  public void arcadeDrive(double speed, double rotation, double slowspeed, double slowrotation) {
+  public void arcadeDrive(double speed, double rotation, boolean sprint) {
     double finalspeed;
     double finalrot;
-    if (speed == 0){
-      finalspeed = slowspeed * .7;
+    if (sprint == false){
+      finalspeed = speed * .75;
     } else {
       finalspeed = speed;
     }
-    if (rotation == 0){
-      finalrot = slowrotation * .7;
-    } else {
-      finalrot = rotation * 0.85;
-    }
+
+      finalrot = rotation * 0.7;
     drivetrain.arcadeDrive(finalspeed, finalrot);
     SmartDashboard.putNumber("LeftEnc", leftencoder.getDistance());
     SmartDashboard.putNumber("RightEnc", rightencoder.getDistance());
@@ -87,7 +84,8 @@ public class Drive extends SubsystemBase {
   }
 
   public double getHeading() {
-    return Math.IEEEremainder(m_gyro.getAngle(), 360);
+    //return Math.IEEEremainder(m_gyro.getAngle(), 360);
+    return m_gyro.getAngle();
   }
 
   public double getTurnRate() {
