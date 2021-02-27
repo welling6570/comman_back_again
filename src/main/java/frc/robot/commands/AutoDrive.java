@@ -23,7 +23,7 @@ public class AutoDrive extends PIDCommand {
    * @param targetAngleDegrees The angle to turn to
    * @param drive              The drive subsystem to use
    */
-  public AutoDrive(double targetDistanceInches, Drive drive) {
+  public AutoDrive(double targetDistanceInches, double asdclamp, Drive drive) {
     super(
         new PIDController(1, 0.1, 0),
         // Close loop on heading
@@ -31,7 +31,7 @@ public class AutoDrive extends PIDCommand {
         // Set reference to target
         targetDistanceInches,
         // Pipe output to turn robot
-        output -> drive.autoStraightDrive(-MathUtil.clamp(output, -0.7, 0.7)),
+        output -> drive.autoStraightDrive(-MathUtil.clamp(output, -asdclamp, asdclamp)),
         // Require the drive
         drive);
 
